@@ -1,5 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var art = require('ascii-art');
+var Canvas = require('canvas');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -19,12 +21,13 @@ connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
     storeOpen();
+    // drawBanner();
 });
 
 function storeOpen() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.log("Welcome to Booyah Base!\n");
+        console.log("Welcome to Inkopolis Square!\n");
         for (var i = 0; i < res.length; i++) {
             console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].price + " | " + res[i].stock_quantity);
 
@@ -82,3 +85,15 @@ function welcomeCustomer() {
         })
     });
 };
+
+// function drawBanner() {
+//     var image = new art.Image({
+//         filepath: "./images/Splatoon_2_logo.png",
+//         alphabet: 'variant4'
+//     });
+
+//     image.write(function (err, rendered) {
+//         console.log(rendered);
+//     })
+
+// }
