@@ -17,6 +17,6 @@ Run the bamazonManager.js file and take control of the shopping list!
 ## Until next time...
 
 ![Off the Hook](https://github.com/Strontiumsun/bamazon/blob/master/images/off_the_hook.jpg "off the hook")
-# Don't Get Cooked!
+# Don't Get Cooked! Stay Off the Hook!
 
-# Stay Off the Hook!
+
