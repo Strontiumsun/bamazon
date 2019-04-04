@@ -1,5 +1,7 @@
 var mysql = require("mysql");
+var Table = require('cli-table');
 var inquirer = require("inquirer");
+
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -47,9 +49,15 @@ function viewProducts() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         console.log("Viewing Products...\n");
+        var table = new Table({
+            head: ['ID', 'Product', 'Department', 'Price($)', 'Stock']
+            , colWidths: [10, 35, 20, 10, 10]
+        });
+
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].price + " | " + res[i].stock_quantity);
+            table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity])
         }
+        console.log(table.toString());
         console.log("\n");
     })
 }
@@ -58,9 +66,15 @@ function viewLowInventory() {
     connection.query("SELECT * FROM products WHERE stock_quantity < 5", function (err, res) {
         if (err) throw err;
         console.log("These products need more inventory!\n");
+        var table = new Table({
+            head: ['ID', 'Product', 'Department', 'Price($)', 'Stock']
+            , colWidths: [10, 35, 20, 10, 10]
+        });
+
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].price + " | current stock: " + res[i].stock_quantity);
+            table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity])
         }
+        console.log(table.toString());
         console.log("\n");
     })
 }

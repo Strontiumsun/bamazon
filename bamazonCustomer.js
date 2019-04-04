@@ -1,7 +1,7 @@
 var mysql = require("mysql");
+var Table = require('cli-table');
 var inquirer = require("inquirer");
-var art = require('ascii-art');
-var Canvas = require('canvas');
+
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -21,17 +21,24 @@ connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
     storeOpen();
-    // drawBanner();
 });
 
 function storeOpen() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         console.log("Welcome to Inkopolis Square!\n");
+        var table = new Table({
+            head: ['ID', 'Product', 'Department', 'Price($)', 'Stock']
+            , colWidths: [10, 35, 20, 10, 10]
+        });
+
+
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].price + " | " + res[i].stock_quantity);
+            table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity])
+
 
         }
+        console.log(table.toString());
         console.log("\n");
         welcomeCustomer();
     })
@@ -50,17 +57,17 @@ function welcomeCustomer() {
             name: "getQuant"
         }
     ]).then(function (ans) {
-        console.log(ans);
+        // console.log(ans);
         connection.query(`SELECT * FROM products WHERE item_id = '${ans.getID}'`, function (err, res) {
             if (err) throw err;
-            console.log(res);
+            // console.log(res);
             var stockIn = res[0].stock_quantity;
             var quant = parseInt(ans.getQuant);
-            console.log(stockIn, quant);
+            // console.log(stockIn, quant);
 
             if (stockIn - quant > 0) {
-                stockIn--;
-                console.log(stockIn);
+                stockIn = stockIn - quant;
+                // console.log(stockIn);
                 connection.query("UPDATE products SET ? WHERE ?",
                     [{
                         stock_quantity: stockIn
@@ -70,10 +77,11 @@ function welcomeCustomer() {
                     }
                     ], function (err, res) {
                         if (err) throw err;
-                        console.log("Database Updated")
+                        console.log("Database Updated\n")
+                        console.log("Thanks for your purchase!\n")
                     })
 
-                console.log("Thanks for your purchase!")
+
                 storeOpen();
             }
             else {
@@ -86,14 +94,22 @@ function welcomeCustomer() {
     });
 };
 
-// function drawBanner() {
-//     var image = new art.Image({
-//         filepath: "./images/Splatoon_2_logo.png",
-//         alphabet: 'variant4'
+
+
+// function tableTrial() {
+
+
+//     // instantiate
+//     var table = new Table({
+//         head: ['ID', 'Product', 'Department', 'Price', 'Stock']
+//         , colWidths: [10, 35, 20, 10, 10]
 //     });
 
-//     image.write(function (err, rendered) {
-//         console.log(rendered);
-//     })
+//     // table is an Array, so you can `push`, `unshift`, `splice` and friends
+//     table.push(
+//         ['First value', 'Second value']
+//         , ['First value', 'Second value']
+//     );
 
+//     console.log(table.toString());
 // }

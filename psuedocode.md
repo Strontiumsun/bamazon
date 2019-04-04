@@ -14,3 +14,5 @@ Customer JS
     - if there is not enough product, we should prevent the order from going through and alerting the customer
 5. If purchase is successful, display total cost of user's purchase to the user
 6. Run the program again so the new information what is available for sale is known to the user
+
+https://www.npmjs.com/package/cli-table
