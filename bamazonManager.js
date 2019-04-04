@@ -59,6 +59,7 @@ function viewProducts() {
         }
         console.log(table.toString());
         console.log("\n");
+        startManager();
     })
 }
 
@@ -76,6 +77,7 @@ function viewLowInventory() {
         }
         console.log(table.toString());
         console.log("\n");
+        startManager();
     })
 }
 
@@ -92,14 +94,14 @@ function addInventory() {
     }]).then(function (answer) {
         connection.query(`SELECT * FROM products WHERE item_id = '${answer.product}'`, function (err, res) {
             if (err) throw err;
-            console.log(res);
+            // console.log(res);
             var stockNow = res[0].stock_quantity;
             var quant = parseInt(answer.quantity);
-            console.log(stockNow, quant);
+            // console.log(stockNow, quant);
 
             var newStock = stockNow + quant;
 
-            console.log(newStock);
+            // console.log(newStock);
 
             connection.query("UPDATE products SET ? WHERE ?",
                 [
@@ -116,6 +118,7 @@ function addInventory() {
 
                 });
         })
+        startManager();
     })
 }
 
@@ -154,5 +157,6 @@ function addProduct() {
                 if (err) throw err;
                 console.log(res.affectedRows + " product inserted!\n");
             })
+        startManager();
     })
 }
